@@ -1,0 +1,24 @@
+messages:
+  menu:
+    title: "§8KillWarrant"
+    info:
+      name: "§7Make a murder order!"
+      lore:
+      - "§6/killer <target> <award>"
+  killer-command:
+    incorrect-number: "§cInput correct number as award!"
+    minimum-award: "§cKillWarrant §7>> §eMinimum award: §6%d"
+    not-enough-money: "§cKillWarrant §7>> §cnot enough money!"
+    already-ordered: "§cYou can't order it due to it has been already ordered by someone."
+    ordered: "§cKillWarrant §7>> §fPlayer §c%s §fwas ordered by §a%s"
+    not-exist: "§cThis player doesn't exist."
+    not-online: "§cThis player must be online."
+    head-client: "§7Client: §a%s"
+    head-award: "§7Award: §6%d"
+    usage:
+      - ""
+      - "§cKillWarrant §7>> §c/killer §8— §fOpen Menu"
+      - "§cKillWarrant §7>> §c/killer <target> <award> §8— §fOrder the player's head"
+      - "§cKillWarrant §7>> §eMinimum award: §6%d"
+  boss-bar:
+    order-announcement: "§c%s §7— §6New order! §eAward: §6%d"

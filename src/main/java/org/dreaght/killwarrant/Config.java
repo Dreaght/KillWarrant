@@ -25,7 +25,29 @@ public class Config {
         if (!config.contains("orders")) {
             config.createSection("orders");
         }
+        if (!config.contains("eco-api")) {
+            config.createSection("eco-api");
+        }
+        if (!config.contains("boss-bar-time")) {
+            config.set("boss-bar-time", 5);
+        }
         plugin.saveConfig();
+    }
+
+    public String getMessageByPath(String path) {
+        return config.getString(path);
+    }
+
+    public List<String> getLinesByPath(String path) {
+        return config.getStringList(path);
+    }
+
+    public Integer getBossBarTime() {
+        return config.getInt("boss-bar-time");
+    }
+
+    public String getEcoApi() {
+        return config.getString("eco-api");
     }
 
     public Set<String> getTargetList() {

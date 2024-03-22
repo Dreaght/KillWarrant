@@ -1,6 +1,7 @@
 package org.dreaght.killwarrant.commands;
 
-import org.bukkit.ChatColor;
+import net.milkbowl.vault.economy.Economy;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -8,6 +9,8 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.dreaght.killwarrant.Config;
+import org.dreaght.killwarrant.KillWarrant;
+import org.dreaght.killwarrant.gui.BossBarManager;
 import org.dreaght.killwarrant.gui.KillerMenu;
 import org.dreaght.killwarrant.utils.Order;
 
@@ -36,6 +39,8 @@ public class KillerCommand implements CommandExecutor, TabCompleter {
     }
 
     private boolean handleArguments(Player player, String[] args) {
+        Config config = new Config();
+
         if (args.length == 0) {
             KillerMenu.handleMenuCreation(player);
         } else if (args.length == 2) {
@@ -47,15 +52,27 @@ public class KillerCommand implements CommandExecutor, TabCompleter {
             if (awardStr.matches("-?\\d+")) {
                 award = Integer.parseInt(awardStr);
             } else {
-                player.sendMessage(ChatColor.RED + "Input correct number as award!");
+                player.sendMessage(config.getMessageByPath("messages.killer-command.incorrect-number"));
                 return false;
             }
 
             if (award < new Config().getMinAward()) {
-                player.sendMessage(ChatColor.RED + "KillWarrant" + ChatColor.GRAY + " >> "
-                        + ChatColor.YELLOW + "Minimum award: " + ChatColor.GOLD + new Config().getMinAward());
+                player.sendMessage(String.format(config.getMessageByPath("messages.killer-command.minimum-award"),
+                        config.getMinAward()));
                 return false;
             }
+
+            Economy economy = KillWarrant.getEcon();
+            int balance = Integer.parseInt(
+                    economy.format(economy.getBalance(player.getName()))
+                            .replace("$", "").replace(",", ""));
+
+            if (balance < award) {
+                player.sendMessage(config.getMessageByPath("messages.killer-command.not-enough-money"));
+                return false;
+            }
+
+            economy.withdrawPlayer(player, award);
 
             Player target = plugin.getServer().getPlayer(targetName);
 
@@ -75,21 +92,27 @@ public class KillerCommand implements CommandExecutor, TabCompleter {
         Config config = new Config();
 
         if (config.getTargetList().contains(targetName)) {
-            client.sendMessage(ChatColor.RED + "You can't order it due to it has been already ordered by someone.");
+            client.sendMessage(config.getMessageByPath("messages.killer-command.already-ordered"));
             return;
         }
 
-        Order order = new Order(targetName, client.getDisplayName(), award);
+        Order order = new Order(targetName, client.getName(), award);
         config.addTarget(order);
+
+        new BossBarManager(plugin).makeBossBar(client.getWorld(), order);
+        Bukkit.broadcastMessage(String.format(config.getMessageByPath("messages.killer-command.ordered"),
+                targetName, client.getName()));
     }
 
     private boolean targetIsValid(Player client, Player target) {
+        Config config = new Config();
+
         if (target == null) {
-            client.sendMessage("This player doesn't exist.");
+            client.sendMessage(config.getMessageByPath("messages.killer-command.not-exist"));
             return false;
         }
         if (!target.isOnline()) {
-            client.sendMessage("This player must be online.");
+            client.sendMessage(config.getMessageByPath("messages.killer-command.not-online"));
             return false;
         }
 
@@ -97,15 +120,14 @@ public class KillerCommand implements CommandExecutor, TabCompleter {
     }
 
     private void sendUsage(Player player) {
-        player.sendMessage("");
-        player.sendMessage(ChatColor.RED + "KillWarrant" + ChatColor.GRAY + " >> "
-                + ChatColor.RED + "/killer" +
-                ChatColor.DARK_GRAY + " — " + ChatColor.WHITE + "Open Menu");
-        player.sendMessage(ChatColor.RED + "KillWarrant" + ChatColor.GRAY + " >> "
-                + ChatColor.RED + "/killer <target> <award>" +
-                ChatColor.DARK_GRAY + " — " + ChatColor.WHITE + "Order the player's head");
-        player.sendMessage(ChatColor.RED + "KillWarrant" + ChatColor.GRAY + " >> "
-                + ChatColor.YELLOW + "Minimum award: " + ChatColor.GOLD + new Config().getMinAward());
+        Config config = new Config();
+
+        String message = "";
+        for (String line : config.getLinesByPath("messages.menu.info.lore")) {
+            message += line.replace("{0}", String.valueOf(config.getMinAward())) + "\n";
+        }
+
+        player.sendMessage(message);
     }
 
     @Override

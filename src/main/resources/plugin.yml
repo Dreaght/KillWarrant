@@ -7,3 +7,4 @@ description: Commission the demise of any participant.
 commands:
   killer:
     description: Look at targets list, order a kill!
+depend: [Vault]
