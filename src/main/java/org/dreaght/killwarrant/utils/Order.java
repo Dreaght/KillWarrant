@@ -1,12 +1,19 @@
 package org.dreaght.killwarrant.utils;
 
+import org.bukkit.Location;
+import org.bukkit.scheduler.BukkitRunnable;
+
 public class Order {
     private String targetName;
     private String clientName;
 
-    private Integer award;
+    private double award;
 
-    public Order(String targetName, String clientName, Integer award) {
+    private Location targetLocation;
+
+    private BukkitRunnable runnable;
+
+    public Order(String targetName, String clientName, double award) {
         this.targetName = targetName;
         this.clientName = clientName;
         this.award = award;
@@ -28,11 +35,27 @@ public class Order {
         this.clientName = newClientName;
     }
 
-    public Integer getAward() {
+    public double getAward() {
         return this.award;
     }
 
     public void setAward(Integer award) {
         this.award = award;
+    }
+
+    public Location getTargetLocation() {
+        return this.targetLocation;
+    }
+
+    public void setTargetLocation(Location location) {
+        this.targetLocation = location;
+    }
+
+    public BukkitRunnable getRunnable() {
+        return this.runnable;
+    }
+
+    public void setRunnable(BukkitRunnable runnable) {
+        this.runnable = runnable;
     }
 }

@@ -1,5 +1,6 @@
 package org.dreaght.killwarrant;
 
+import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
@@ -11,10 +12,12 @@ import java.util.Objects;
 import java.util.Set;
 
 public class Config {
-    private final Plugin plugin = KillWarrant.getInstance();
-    private final FileConfiguration config = plugin.getConfig();
+    private final Plugin plugin;
+    private final FileConfiguration config;
 
-    public Config() {
+    public Config(Plugin plugin) {
+        this.plugin = plugin;
+        this.config = plugin.getConfig();
         fillConfig();
     }
 
@@ -24,9 +27,6 @@ public class Config {
         }
         if (!config.contains("orders")) {
             config.createSection("orders");
-        }
-        if (!config.contains("eco-api")) {
-            config.createSection("eco-api");
         }
         if (!config.contains("boss-bar-time")) {
             config.set("boss-bar-time", 5);
@@ -42,12 +42,8 @@ public class Config {
         return config.getStringList(path);
     }
 
-    public Integer getBossBarTime() {
-        return config.getInt("boss-bar-time");
-    }
-
-    public String getEcoApi() {
-        return config.getString("eco-api");
+    public double getBossBarTime() {
+        return config.getDouble("boss-bar-time");
     }
 
     public Set<String> getTargetList() {
@@ -56,8 +52,12 @@ public class Config {
 
     public Order getOrderByTargetName(String targetName) {
         ConfigurationSection section = config.getConfigurationSection("orders." + targetName);
-        assert section != null;
-        return new Order(section.getName(), section.getString("client"), section.getInt("award"));
+
+        if (section == null) {
+            return null;
+        }
+
+        return new Order(section.getName(), section.getString("client"), section.getDouble("award"));
     }
 
     public List<Order> getAllOrders() {
@@ -75,6 +75,7 @@ public class Config {
         }
         config.set("orders." + targetName + ".client", order.getClientName());
         config.set("orders." + targetName + ".award", order.getAward());
+        config.set("orders." + targetName + ".target-location", order.getTargetLocation());
         plugin.saveConfig();
     }
 
@@ -83,8 +84,15 @@ public class Config {
         plugin.saveConfig();
     }
 
-    public Integer getMinAward() {
-        return config.getInt("min-award");
+    public double getMinAward() {
+        return config.getDouble("min-award");
     }
 
+    public int getLocationUpdatePeriod() {
+        return config.getInt("location-update-period");
+    }
+
+    public Location getLocation(String targetName) {
+        return config.getLocation("orders." + targetName + ".target-location");
+    }
 }

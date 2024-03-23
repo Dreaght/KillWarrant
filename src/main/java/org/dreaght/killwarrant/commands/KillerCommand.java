@@ -10,10 +10,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.dreaght.killwarrant.Config;
 import org.dreaght.killwarrant.KillWarrant;
-import org.dreaght.killwarrant.gui.BossBarManager;
+import org.dreaght.killwarrant.gui.BossBarNotification;
 import org.dreaght.killwarrant.gui.KillerMenu;
 import org.dreaght.killwarrant.utils.Order;
+import org.dreaght.killwarrant.utils.OrderManager;
+import org.dreaght.killwarrant.utils.ParseValue;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class KillerCommand implements CommandExecutor, TabCompleter {
@@ -39,15 +42,17 @@ public class KillerCommand implements CommandExecutor, TabCompleter {
     }
 
     private boolean handleArguments(Player player, String[] args) {
-        Config config = new Config();
+        Config config = KillWarrant.getCfg();
 
         if (args.length == 0) {
             KillerMenu.handleMenuCreation(player);
         } else if (args.length == 2) {
+            DecimalFormat decimalFormat = new DecimalFormat(config.getMessageByPath("decimal-award-format"));
+
             String targetName = args[0];
             String awardStr = args[1];
 
-            int award;
+            double award;
 
             if (awardStr.matches("-?\\d+")) {
                 award = Integer.parseInt(awardStr);
@@ -56,16 +61,15 @@ public class KillerCommand implements CommandExecutor, TabCompleter {
                 return false;
             }
 
-            if (award < new Config().getMinAward()) {
-                player.sendMessage(String.format(config.getMessageByPath("messages.killer-command.minimum-award"),
-                        config.getMinAward()));
+            if (award < config.getMinAward()) {
+                String minimumAward = config.getMessageByPath("messages.killer-command.minimum-award");
+                player.sendMessage(ParseValue.parseWithBraces(minimumAward,
+                        new String[]{"MINIMUM_AWARD"}, new String[]{decimalFormat.format(config.getMinAward())}));
                 return false;
             }
 
             Economy economy = KillWarrant.getEcon();
-            int balance = Integer.parseInt(
-                    economy.format(economy.getBalance(player.getName()))
-                            .replace("$", "").replace(",", ""));
+            double balance = economy.getBalance(player.getName());
 
             if (balance < award) {
                 player.sendMessage(config.getMessageByPath("messages.killer-command.not-enough-money"));
@@ -88,8 +92,8 @@ public class KillerCommand implements CommandExecutor, TabCompleter {
         return true;
     }
 
-    private void makeOrder(String targetName, Player client, int award) {
-        Config config = new Config();
+    private void makeOrder(String targetName, Player client, double award) {
+        Config config = KillWarrant.getCfg();
 
         if (config.getTargetList().contains(targetName)) {
             client.sendMessage(config.getMessageByPath("messages.killer-command.already-ordered"));
@@ -99,13 +103,17 @@ public class KillerCommand implements CommandExecutor, TabCompleter {
         Order order = new Order(targetName, client.getName(), award);
         config.addTarget(order);
 
-        new BossBarManager(plugin).makeBossBar(client.getWorld(), order);
-        Bukkit.broadcastMessage(String.format(config.getMessageByPath("messages.killer-command.ordered"),
-                targetName, client.getName()));
+        new BossBarNotification(plugin).makeBossBar(client.getWorld(), order);
+
+        String ordered = config.getMessageByPath("messages.killer-command.ordered");
+        Bukkit.broadcastMessage(ParseValue.parseWithBraces(ordered,
+                new String[]{"TARGET_NAME", "CLIENT_NAME"}, new String[]{targetName, client.getName()}));
+        OrderManager orderManager = KillWarrant.getOrderManager();
+        orderManager.saveOrder(order);
     }
 
     private boolean targetIsValid(Player client, Player target) {
-        Config config = new Config();
+        Config config = KillWarrant.getCfg();
 
         if (target == null) {
             client.sendMessage(config.getMessageByPath("messages.killer-command.not-exist"));
@@ -120,14 +128,9 @@ public class KillerCommand implements CommandExecutor, TabCompleter {
     }
 
     private void sendUsage(Player player) {
-        Config config = new Config();
+        Config config = KillWarrant.getCfg();
 
-        String message = "";
-        for (String line : config.getLinesByPath("messages.menu.info.lore")) {
-            message += line.replace("{0}", String.valueOf(config.getMinAward())) + "\n";
-        }
-
-        player.sendMessage(message);
+        config.getLinesByPath("messages.killer-command.usage").forEach(player::sendMessage);
     }
 
     @Override

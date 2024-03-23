@@ -9,19 +9,22 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.dreaght.killwarrant.Config;
+import org.dreaght.killwarrant.KillWarrant;
 import org.dreaght.killwarrant.utils.Order;
+import org.dreaght.killwarrant.utils.ParseValue;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class KillerMenu {
     public static void handleMenuCreation(Player player) {
-        Config config = new Config();
+        Config config = KillWarrant.getCfg();
 
         Inventory inventory = Bukkit.createInventory(player, 36, config.getMessageByPath("messages.menu.title"));
 
-        List<Order> orders = config.getAllOrders();
-        List<ItemStack> targetHeads = getTargetHeads(orders);
+        Set<Order> orders = KillWarrant.getOrderManager().getOrders();
 
         for (int i = 0; i < 9; i++) {
             ItemStack item = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
@@ -31,10 +34,6 @@ public class KillerMenu {
             item.setItemMeta(itemMeta);
 
             inventory.setItem(i, item);
-        }
-
-        for (int i = 9; i < targetHeads.size() + 9; i++) {
-            inventory.setItem(i, targetHeads.get(i - 9));
         }
 
         ItemStack infoItem = new ItemStack(Material.PAINTING);
@@ -48,29 +47,6 @@ public class KillerMenu {
         inventory.setItem(4, infoItem);
 
         player.openInventory(inventory);
-    }
-
-    private static List<ItemStack> getTargetHeads(List<Order> orders) {
-        List<ItemStack> targetHeads = new ArrayList<>();
-        Config config = new Config();
-
-        for (Order order : orders) {
-            ItemStack skull = new ItemStack(Material.LEGACY_SKULL_ITEM, 1, (short)3);
-            SkullMeta skullMeta = (SkullMeta) skull.getItemMeta();
-
-            skullMeta.setOwner(order.getTargetName());
-            skullMeta.setDisplayName(ChatColor.RED + order.getTargetName());
-
-            List<String> lore = new ArrayList<>();
-            lore.add(String.format(config.getMessageByPath("messages.killer-command.head-client"), order.getClientName()));
-            lore.add(String.format(config.getMessageByPath("messages.killer-command.head-award"), order.getAward()));
-
-            skullMeta.setLore(lore);
-            skull.setItemMeta(skullMeta);
-
-            targetHeads.add(skull);
-        }
-
-        return targetHeads;
+        MenuManager.addPlayer(player);
     }
 }

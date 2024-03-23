@@ -1,3 +1,11 @@
+min-award: 50
+boss-bar-time: 5.0 # in seconds
+
+# 0 - "#"; 1 - "#.#"; 2 - "#.##"
+decimal-award-format: "#"
+decimal-location-format: "#"
+location-update-period: 10 # in seconds
+
 messages:
   menu:
     title: "§8KillWarrant"
@@ -7,18 +15,19 @@ messages:
       - "§6/killer <target> <award>"
   killer-command:
     incorrect-number: "§cInput correct number as award!"
-    minimum-award: "§cKillWarrant §7>> §eMinimum award: §6%d"
+    minimum-award: "§cKillWarrant §7>> §eMinimum award: §6%MINIMUM_AWARD%"
     not-enough-money: "§cKillWarrant §7>> §cnot enough money!"
     already-ordered: "§cYou can't order it due to it has been already ordered by someone."
-    ordered: "§cKillWarrant §7>> §fPlayer §c%s §fwas ordered by §a%s"
+    ordered: "§cKillWarrant §7>> §fPlayer §c%TARGET_NAME% §fwas ordered by §a%CLIENT_NAME%"
     not-exist: "§cThis player doesn't exist."
     not-online: "§cThis player must be online."
-    head-client: "§7Client: §a%s"
-    head-award: "§7Award: §6%d"
+    head-client: "§7Client: §a%CLIENT_NAME%"
+    head-award: "§7Award: §6%AWARD%"
+    head-location: "§7Location: §6%LOCATION% §7(§8%COUNT%§7)"
     usage:
       - ""
       - "§cKillWarrant §7>> §c/killer §8— §fOpen Menu"
       - "§cKillWarrant §7>> §c/killer <target> <award> §8— §fOrder the player's head"
-      - "§cKillWarrant §7>> §eMinimum award: §6%d"
   boss-bar:
-    order-announcement: "§c%s §7— §6New order! §eAward: §6%d"
+    order-announcement: "§6New order! §c§l%TARGET_NAME% §eAward: §6%AWARD%§7!"
+  killed: "§cKillWarrant §7>> §fPlayer §a%KILLER_NAME% §fhas killed §c%TARGET_NAME% §fand got §6%AWARD%"

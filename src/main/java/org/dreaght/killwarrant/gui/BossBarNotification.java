@@ -7,27 +7,34 @@ import org.bukkit.boss.BossBar;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitTask;
 import org.dreaght.killwarrant.Config;
+import org.dreaght.killwarrant.KillWarrant;
 import org.dreaght.killwarrant.utils.Order;
+import org.dreaght.killwarrant.utils.ParseValue;
 
-public class BossBarManager {
+import java.text.DecimalFormat;
+
+public class BossBarNotification {
     private final Plugin plugin;
 
-    public BossBarManager(Plugin plugin) {
+    public BossBarNotification(Plugin plugin) {
         this.plugin = plugin;
     }
 
     public void makeBossBar(World world, Order order) {
-        Config config = new Config();
+        Config config = KillWarrant.getCfg();
+
+        DecimalFormat decimalFormat = new DecimalFormat(config.getMessageByPath("decimal-award-format"));
 
         Server server = plugin.getServer();
         final BukkitTask[] finalProgressTask = new BukkitTask[1];
 
-        BukkitTask task = server.getScheduler().runTask(plugin, () -> {
+        server.getScheduler().runTask(plugin, () -> {
             Bukkit.getOnlinePlayers().forEach(player -> world.playSound(player.getLocation(),
                     Sound.ENTITY_ENDER_DRAGON_HURT, 3.0F, 0.5F));
             BossBar bar = Bukkit.getServer().createBossBar(
-                    String.format(config.getMessageByPath("messages.boss-bar.order-announcement"),
-                            order.getTargetName(), order.getAward()),
+                    ParseValue.parseWithBraces(config.getMessageByPath("messages.boss-bar.order-announcement"),
+                            new String[]{"TARGET_NAME", "AWARD"},
+                            new Object[]{order.getTargetName(), decimalFormat.format(order.getAward())}),
                     BarColor.GREEN, BarStyle.SOLID);
             bar.setVisible(true);
             bar.setProgress(1);

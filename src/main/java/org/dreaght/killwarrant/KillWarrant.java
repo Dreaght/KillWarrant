@@ -4,14 +4,19 @@ import net.milkbowl.vault.economy.Economy;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.dreaght.killwarrant.commands.KillerCommand;
+import org.dreaght.killwarrant.listeners.JoinListener;
 import org.dreaght.killwarrant.listeners.MenuListener;
-import org.dreaght.killwarrant.listeners.OnKill;
+import org.dreaght.killwarrant.listeners.KillListener;
+import org.dreaght.killwarrant.listeners.QuitListener;
+import org.dreaght.killwarrant.utils.OrderManager;
 
 import java.util.Objects;
 
 public final class KillWarrant extends JavaPlugin {
     private static KillWarrant instance;
     private static Economy econ = null;
+    private static Config config;
+    private static OrderManager orderManager;
 
     public static KillWarrant getInstance() {
         return instance;
@@ -21,11 +26,17 @@ public final class KillWarrant extends JavaPlugin {
         return econ;
     }
 
+    public static Config getCfg() {
+        return config;
+    }
+
+    public static OrderManager getOrderManager() {
+        return orderManager;
+    }
+
     @Override
     public void onEnable() {
-        getServer().getPluginManager().registerEvents(new OnKill(), this);
-        getServer().getPluginManager().registerEvents(new MenuListener(), this);
-        Objects.requireNonNull(getCommand("killer")).setExecutor(new KillerCommand(this));
+        this.saveDefaultConfig();
 
         if (!setupEconomy()) {
             getLogger().severe(String.format("[%s] - Disabled due to no Vault dependency found!", getDescription().getName()));
@@ -33,11 +44,18 @@ public final class KillWarrant extends JavaPlugin {
             return;
         }
 
+        config = new Config(this);
+
         instance = this;
 
-        this.saveDefaultConfig();
+        getServer().getPluginManager().registerEvents(new KillListener(), this);
+        getServer().getPluginManager().registerEvents(new MenuListener(), this);
+        getServer().getPluginManager().registerEvents(new JoinListener(), this);
+        getServer().getPluginManager().registerEvents(new QuitListener(), this);
+        Objects.requireNonNull(getCommand("killer")).setExecutor(new KillerCommand(this));
 
-
+        orderManager = new OrderManager(this);
+        orderManager.loadOrders();
     }
 
     private boolean setupEconomy() {
