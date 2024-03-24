@@ -13,14 +13,9 @@ import org.dreaght.killwarrant.utils.OrderManager;
 import java.util.Objects;
 
 public final class KillWarrant extends JavaPlugin {
-    private static KillWarrant instance;
     private static Economy econ = null;
     private static Config config;
     private static OrderManager orderManager;
-
-    public static KillWarrant getInstance() {
-        return instance;
-    }
 
     public static Economy getEcon() {
         return econ;
@@ -45,8 +40,6 @@ public final class KillWarrant extends JavaPlugin {
         }
 
         config = new Config(this);
-
-        instance = this;
 
         getServer().getPluginManager().registerEvents(new KillListener(), this);
         getServer().getPluginManager().registerEvents(new MenuListener(), this);
