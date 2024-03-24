@@ -1,5 +1,6 @@
 package org.dreaght.killwarrant.gui;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -62,10 +63,11 @@ public class MenuManager {
         DecimalFormat decimalLocFormat = new DecimalFormat(config.getMessageByPath("decimal-location-format"));
 
         for (Order order : orders) {
-            ItemStack skull = new ItemStack(Material.LEGACY_SKULL_ITEM, 1, (short)3);
+            ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
             SkullMeta skullMeta = (SkullMeta) skull.getItemMeta();
 
-            skullMeta.setOwner(order.getTargetName());
+            skullMeta.setOwningPlayer(Bukkit.getOfflinePlayer(order.getTargetName())); // Set player name directly
+
             skullMeta.setDisplayName(ChatColor.RED + order.getTargetName());
 
             List<String> lore = new ArrayList<>();

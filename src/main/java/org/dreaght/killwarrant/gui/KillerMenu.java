@@ -24,8 +24,6 @@ public class KillerMenu {
 
         Inventory inventory = Bukkit.createInventory(player, 36, config.getMessageByPath("messages.menu.title"));
 
-        Set<Order> orders = KillWarrant.getOrderManager().getOrders();
-
         for (int i = 0; i < 9; i++) {
             ItemStack item = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
             ItemMeta itemMeta = item.getItemMeta();
