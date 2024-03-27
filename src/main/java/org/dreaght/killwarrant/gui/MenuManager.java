@@ -1,14 +1,13 @@
 package org.dreaght.killwarrant.gui;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
-import org.dreaght.killwarrant.Config;
 import org.dreaght.killwarrant.KillWarrant;
+import org.dreaght.killwarrant.config.ConfigManager;
 import org.dreaght.killwarrant.utils.Order;
 import org.dreaght.killwarrant.utils.ParseValue;
 
@@ -21,10 +20,10 @@ import java.util.Set;
 public class MenuManager {
     private static final Set<Player> playersViewingMenu = new HashSet<>();
 
-    public static void updateLocForAllMenu(long count) {
+    public static void updateLocForAllMenu(long count, long timeLeft) {
         Set<Order> orders = KillWarrant.getOrderManager().getOrders();
         
-        List<ItemStack> targetHeads = getTargetHeads(orders, count);
+        List<ItemStack> targetHeads = getTargetHeads(orders, count, timeLeft);
         
         playersViewingMenu.forEach(player -> {
             Inventory inventory = player.getOpenInventory().getTopInventory();
@@ -55,32 +54,33 @@ public class MenuManager {
         playersViewingMenu.remove(player);
     }
 
-    private static List<ItemStack> getTargetHeads(Set<Order> orders, long count) {
+    private static List<ItemStack> getTargetHeads(Set<Order> orders, long count, long timeLeft) {
         List<ItemStack> targetHeads = new ArrayList<>();
-        Config config = KillWarrant.getCfg();
+        ConfigManager configManager = ConfigManager.getInstance();
 
-        DecimalFormat decimalAwardFormat = new DecimalFormat(config.getMessageByPath("decimal-award-format"));
-        DecimalFormat decimalLocFormat = new DecimalFormat(config.getMessageByPath("decimal-location-format"));
+        DecimalFormat decimalAwardFormat = new DecimalFormat(configManager.getMessageConfig().getMessageByPath("decimal-award-format"));
+        DecimalFormat decimalLocFormat = new DecimalFormat(configManager.getMessageConfig().getMessageByPath("decimal-location-format"));
 
         for (Order order : orders) {
             ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
             SkullMeta skullMeta = (SkullMeta) skull.getItemMeta();
 
-            skullMeta.setOwningPlayer(Bukkit.getOfflinePlayer(order.getTargetName())); // Set player name directly
+            skullMeta.setOwningPlayer(Bukkit.getOfflinePlayer(order.getTargetName()));
 
-            skullMeta.setDisplayName(ChatColor.RED + order.getTargetName());
+            skullMeta.setDisplayName(ParseValue.parseWithBraces(configManager.getMessageConfig().getMessageByPath("messages.killer-command.head.target"),
+                    new String[]{"TARGET_NAME", "TIME_LEFT"}, new Object[]{order.getTargetName(), timeLeft}));
 
             List<String> lore = new ArrayList<>();
-            lore.add(ParseValue.parseWithBraces(config.getMessageByPath("messages.killer-command.head-client"),
+            lore.add(ParseValue.parseWithBraces(configManager.getMessageConfig().getMessageByPath("messages.killer-command.head.client"),
                     new String[]{"CLIENT_NAME"}, new String[]{order.getClientName()}));
-            lore.add(ParseValue.parseWithBraces(config.getMessageByPath("messages.killer-command.head-award"),
+            lore.add(ParseValue.parseWithBraces(configManager.getMessageConfig().getMessageByPath("messages.killer-command.head.award"),
                     new String[]{"AWARD"}, new Object[]{decimalAwardFormat.format(order.getAward())}));
 
             String location = decimalLocFormat.format(order.getTargetLocation().getX()) + " " +
                     decimalLocFormat.format(order.getTargetLocation().getY()) + " " +
                     decimalLocFormat.format(order.getTargetLocation().getZ());
 
-            lore.add(ParseValue.parseWithBraces(config.getMessageByPath("messages.killer-command.head-location"),
+            lore.add(ParseValue.parseWithBraces(configManager.getMessageConfig().getMessageByPath("messages.killer-command.head.location"),
                     new String[]{"LOCATION", "COUNT"}, new Object[]{location, count}));
 
             skullMeta.setLore(lore);

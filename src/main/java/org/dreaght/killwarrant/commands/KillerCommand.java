@@ -8,8 +8,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import org.dreaght.killwarrant.Config;
 import org.dreaght.killwarrant.KillWarrant;
+import org.dreaght.killwarrant.config.ConfigManager;
 import org.dreaght.killwarrant.gui.BossBarNotification;
 import org.dreaght.killwarrant.gui.KillerMenu;
 import org.dreaght.killwarrant.utils.Order;
@@ -17,6 +17,7 @@ import org.dreaght.killwarrant.utils.OrderManager;
 import org.dreaght.killwarrant.utils.ParseValue;
 
 import java.text.DecimalFormat;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class KillerCommand implements CommandExecutor, TabCompleter {
@@ -42,12 +43,12 @@ public class KillerCommand implements CommandExecutor, TabCompleter {
     }
 
     private boolean handleArguments(Player player, String[] args) {
-        Config config = KillWarrant.getCfg();
+        ConfigManager configManager = ConfigManager.getInstance();
 
         if (args.length == 0) {
             KillerMenu.handleMenuCreation(player);
         } else if (args.length == 2) {
-            DecimalFormat decimalFormat = new DecimalFormat(config.getMessageByPath("decimal-award-format"));
+            DecimalFormat decimalFormat = new DecimalFormat(configManager.getMessageConfig().getMessageByPath("decimal-award-format"));
 
             String targetName = args[0];
             String awardStr = args[1];
@@ -57,14 +58,14 @@ public class KillerCommand implements CommandExecutor, TabCompleter {
             if (awardStr.matches("-?\\d+")) {
                 award = Integer.parseInt(awardStr);
             } else {
-                player.sendMessage(config.getMessageByPath("messages.killer-command.incorrect-number"));
+                player.sendMessage(configManager.getMessageConfig().getMessageByPath("messages.killer-command.incorrect-number"));
                 return false;
             }
 
-            if (award < config.getMinAward()) {
-                String minimumAward = config.getMessageByPath("messages.killer-command.minimum-award");
+            if (award < configManager.getSettingsConfig().getMinAward()) {
+                String minimumAward = configManager.getMessageConfig().getMessageByPath("messages.killer-command.minimum-award");
                 player.sendMessage(ParseValue.parseWithBraces(minimumAward,
-                        new String[]{"MINIMUM_AWARD"}, new String[]{decimalFormat.format(config.getMinAward())}));
+                        new String[]{"MINIMUM_AWARD"}, new String[]{decimalFormat.format(configManager.getSettingsConfig().getMinAward())}));
                 return false;
             }
 
@@ -72,11 +73,9 @@ public class KillerCommand implements CommandExecutor, TabCompleter {
             double balance = economy.getBalance(player.getName());
 
             if (balance < award) {
-                player.sendMessage(config.getMessageByPath("messages.killer-command.not-enough-money"));
+                player.sendMessage(configManager.getMessageConfig().getMessageByPath("messages.killer-command.not-enough-money"));
                 return false;
             }
-
-            economy.withdrawPlayer(player, award);
 
             Player target = plugin.getServer().getPlayer(targetName);
 
@@ -84,7 +83,7 @@ public class KillerCommand implements CommandExecutor, TabCompleter {
                 return false;
             }
 
-            makeOrder(targetName, player, award);
+            makeOrder(target, player, award, economy);
         } else {
             sendUsage(player);
         }
@@ -92,35 +91,44 @@ public class KillerCommand implements CommandExecutor, TabCompleter {
         return true;
     }
 
-    private void makeOrder(String targetName, Player client, double award) {
-        Config config = KillWarrant.getCfg();
+    private void makeOrder(Player target, Player client, double award, Economy economy) {
+        ConfigManager configManager = ConfigManager.getInstance();
 
-        if (config.getTargetList().contains(targetName)) {
-            client.sendMessage(config.getMessageByPath("messages.killer-command.already-ordered"));
+        if (configManager.getOrdersConfig().getTargetList().contains(target.getName())) {
+            client.sendMessage(configManager.getMessageConfig().getMessageByPath("messages.killer-command.already-ordered"));
             return;
         }
 
-        Order order = new Order(targetName, client.getName(), award);
-        config.addTarget(order);
+        if (target.equals(client) && (!configManager.getSettingsConfig().getCanOrderYourself())) {
+            client.sendMessage(configManager.getMessageConfig().getMessageByPath("messages.killer-command.cant-order-yourself"));
+            return;
+        }
+
+        LocalDateTime currentDate = LocalDateTime.now();
+
+        Order order = new Order(target, client, award, currentDate);
+        configManager.getOrdersConfig().addTarget(order);
 
         new BossBarNotification(plugin).makeBossBar(client.getWorld(), order);
 
-        String ordered = config.getMessageByPath("messages.killer-command.ordered");
+        String ordered = configManager.getMessageConfig().getMessageByPath("messages.killer-command.ordered");
         Bukkit.broadcastMessage(ParseValue.parseWithBraces(ordered,
-                new String[]{"TARGET_NAME", "CLIENT_NAME"}, new String[]{targetName, client.getName()}));
+                new String[]{"TARGET_NAME", "CLIENT_NAME"}, new String[]{target.getName(), client.getName()}));
         OrderManager orderManager = KillWarrant.getOrderManager();
         orderManager.saveOrder(order);
+
+        economy.withdrawPlayer(client, award);
     }
 
     private boolean targetIsValid(Player client, Player target) {
-        Config config = KillWarrant.getCfg();
+        ConfigManager configManager = ConfigManager.getInstance();
 
         if (target == null) {
-            client.sendMessage(config.getMessageByPath("messages.killer-command.not-exist"));
+            client.sendMessage(configManager.getMessageConfig().getMessageByPath("messages.killer-command.not-exist"));
             return false;
         }
         if (!target.isOnline()) {
-            client.sendMessage(config.getMessageByPath("messages.killer-command.not-online"));
+            client.sendMessage(configManager.getMessageConfig().getMessageByPath("messages.killer-command.not-online"));
             return false;
         }
 
@@ -128,9 +136,9 @@ public class KillerCommand implements CommandExecutor, TabCompleter {
     }
 
     private void sendUsage(Player player) {
-        Config config = KillWarrant.getCfg();
+        ConfigManager configManager = ConfigManager.getInstance();
 
-        config.getLinesByPath("messages.killer-command.usage").forEach(player::sendMessage);
+        configManager.getMessageConfig().getLinesByPath("messages.killer-command.usage").forEach(player::sendMessage);
     }
 
     @Override

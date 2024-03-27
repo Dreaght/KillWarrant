@@ -4,6 +4,10 @@ import net.milkbowl.vault.economy.Economy;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.dreaght.killwarrant.commands.KillerCommand;
+import org.dreaght.killwarrant.config.ConfigManager;
+import org.dreaght.killwarrant.config.MessageConfig;
+import org.dreaght.killwarrant.config.OrdersConfig;
+import org.dreaght.killwarrant.config.SettingsConfig;
 import org.dreaght.killwarrant.listeners.JoinListener;
 import org.dreaght.killwarrant.listeners.MenuListener;
 import org.dreaght.killwarrant.listeners.KillListener;
@@ -14,15 +18,10 @@ import java.util.Objects;
 
 public final class KillWarrant extends JavaPlugin {
     private static Economy econ = null;
-    private static Config config;
     private static OrderManager orderManager;
 
     public static Economy getEcon() {
         return econ;
-    }
-
-    public static Config getCfg() {
-        return config;
     }
 
     public static OrderManager getOrderManager() {
@@ -31,15 +30,13 @@ public final class KillWarrant extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        this.saveDefaultConfig();
-
         if (!setupEconomy()) {
             getLogger().severe(String.format("[%s] - Disabled due to no Vault dependency found!", getDescription().getName()));
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
 
-        config = new Config(this);
+        ConfigManager.init(this);
 
         getServer().getPluginManager().registerEvents(new KillListener(), this);
         getServer().getPluginManager().registerEvents(new MenuListener(), this);

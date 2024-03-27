@@ -6,8 +6,7 @@ import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitTask;
-import org.dreaght.killwarrant.Config;
-import org.dreaght.killwarrant.KillWarrant;
+import org.dreaght.killwarrant.config.ConfigManager;
 import org.dreaght.killwarrant.utils.Order;
 import org.dreaght.killwarrant.utils.ParseValue;
 
@@ -21,9 +20,9 @@ public class BossBarNotification {
     }
 
     public void makeBossBar(World world, Order order) {
-        Config config = KillWarrant.getCfg();
+        ConfigManager configManager = ConfigManager.getInstance();
 
-        DecimalFormat decimalFormat = new DecimalFormat(config.getMessageByPath("decimal-award-format"));
+        DecimalFormat decimalFormat = new DecimalFormat(configManager.getMessageConfig().getMessageByPath("decimal-award-format"));
 
         Server server = plugin.getServer();
         final BukkitTask[] finalProgressTask = new BukkitTask[1];
@@ -32,7 +31,7 @@ public class BossBarNotification {
             Bukkit.getOnlinePlayers().forEach(player -> world.playSound(player.getLocation(),
                     Sound.ENTITY_ENDER_DRAGON_HURT, 3.0F, 0.5F));
             BossBar bar = Bukkit.getServer().createBossBar(
-                    ParseValue.parseWithBraces(config.getMessageByPath("messages.boss-bar.order-announcement"),
+                    ParseValue.parseWithBraces(configManager.getMessageConfig().getMessageByPath("messages.boss-bar.order-announcement"),
                             new String[]{"TARGET_NAME", "AWARD"},
                             new Object[]{order.getTargetName(), decimalFormat.format(order.getAward())}),
                     BarColor.GREEN, BarStyle.SOLID);
@@ -44,7 +43,7 @@ public class BossBarNotification {
             final double[] progress = {1.0};
 
             finalProgressTask[0] = server.getScheduler().runTaskTimer(plugin, () -> {
-                progress[0] -= 0.05 / config.getBossBarTime();
+                progress[0] -= 0.05 / configManager.getSettingsConfig().getBossBarTime();
                 if (progress[0] <= 0) {
                     bar.removeAll();
                     finalProgressTask[0].cancel();

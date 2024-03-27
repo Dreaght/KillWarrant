@@ -1,11 +1,14 @@
 package org.dreaght.killwarrant.utils;
 
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.time.LocalDateTime;
+
 public class Order {
-    private String targetName;
-    private String clientName;
+    private Player target;
+    private Player client;
 
     private double award;
 
@@ -13,49 +16,56 @@ public class Order {
 
     private BukkitRunnable runnable;
 
-    public Order(String targetName, String clientName, double award) {
-        this.targetName = targetName;
-        this.clientName = clientName;
+    private LocalDateTime date;
+
+    public Order(Player targetName, Player clientName, double award, LocalDateTime date) {
+        this.target = targetName;
+        this.client = clientName;
         this.award = award;
+        this.date = date;
     }
 
     public String getTargetName() {
-        return this.targetName;
-    }
-
-    public void setTargetName(String newTargetName) {
-        this.targetName = newTargetName;
+        return target.getName();
     }
 
     public String getClientName() {
-        return this.clientName;
+        return client.getName();
     }
 
-    public void setClientName(String newClientName) {
-        this.clientName = newClientName;
+    public Player getTarget() {
+        return target;
+    }
+
+    public Player getClient() {
+        return client;
     }
 
     public double getAward() {
-        return this.award;
-    }
-
-    public void setAward(Integer award) {
-        this.award = award;
+        return award;
     }
 
     public Location getTargetLocation() {
-        return this.targetLocation;
+        return targetLocation;
     }
 
     public void setTargetLocation(Location location) {
-        this.targetLocation = location;
+        targetLocation = location;
     }
 
     public BukkitRunnable getRunnable() {
-        return this.runnable;
+        return runnable;
     }
 
     public void setRunnable(BukkitRunnable runnable) {
         this.runnable = runnable;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
+    }
+
+    public LocalDateTime getDate() {
+        return date;
     }
 }

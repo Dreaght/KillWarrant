@@ -21,6 +21,6 @@ public class QuitListener implements Listener {
         }
 
         orderManager.removeOrder(order);
-        MenuManager.updateLocForAllMenu(0);
+        MenuManager.updateLocForAllMenu(0, 0);
     }
 }

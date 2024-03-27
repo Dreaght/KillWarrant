@@ -5,10 +5,11 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.dreaght.killwarrant.Config;
-import org.dreaght.killwarrant.KillWarrant;
+import org.dreaght.killwarrant.config.ConfigManager;
 import org.dreaght.killwarrant.gui.MenuManager;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -24,7 +25,9 @@ public class OrderManager {
     }
 
     public void loadOrders() {
-        List<Order> orders = KillWarrant.getCfg().getAllOrders();
+        ConfigManager configManager = ConfigManager.getInstance();
+
+        List<Order> orders = configManager.getOrdersConfig().getAllOrders();
 
         for (Order order : orders) {
             this.saveOrder(order);
@@ -32,8 +35,9 @@ public class OrderManager {
     }
 
     public void saveOrder(Order order) {
-        Config config = KillWarrant.getCfg();
-        int seconds = config.getLocationUpdatePeriod();
+        ConfigManager configManager = ConfigManager.getInstance();
+
+        int seconds = configManager.getSettingsConfig().getLocationUpdatePeriod();
 
         AtomicInteger count = new AtomicInteger(seconds);
 
@@ -65,7 +69,16 @@ public class OrderManager {
                     order.setTargetLocation(lastLocation);
                 }
 
-                MenuManager.updateLocForAllMenu(count.decrementAndGet());
+                LocalDateTime date = order.getDate();
+                LocalDateTime currentDate = LocalDateTime.now();
+
+                MenuManager.updateLocForAllMenu(count.decrementAndGet(), timeLeft(date, currentDate));
+
+                if (outOfTime(date, currentDate)) {
+                    EcoTransactions.refundMoney(order);
+                    removeOrder(order);
+                    cancel();
+                }
 
                 if (!orders.contains(order)) {
                     cancel();
@@ -79,9 +92,12 @@ public class OrderManager {
     }
 
     public void removeOrder(Order order) {
+        ConfigManager configManager = ConfigManager.getInstance();
+
         order.getRunnable().cancel();
         order.setRunnable(null);
         orders.remove(order);
+        configManager.getOrdersConfig().removeTarget(order.getTargetName());
     }
 
     public Order getOrderByTargetName(String targetName) {
@@ -96,5 +112,23 @@ public class OrderManager {
 
     public Set<Order> getOrders() {
         return this.orders;
+    }
+
+    private boolean outOfTime(LocalDateTime dateTime1, LocalDateTime dateTime2) {
+        ConfigManager configManager = ConfigManager.getInstance();
+
+        Duration duration = Duration.between(dateTime1, dateTime2);
+        long minutesDifference = Math.abs(duration.toMinutes());
+
+        return minutesDifference >= configManager.getSettingsConfig().getMaxOrderTime();
+    }
+
+    private long timeLeft(LocalDateTime dateTime1, LocalDateTime dateTime2) {
+        ConfigManager configManager = ConfigManager.getInstance();
+
+        Duration duration = Duration.between(dateTime1, dateTime2);
+        long minutesDifference = Math.abs(duration.toMinutes());
+
+        return configManager.getSettingsConfig().getMaxOrderTime() - minutesDifference;
     }
 }
