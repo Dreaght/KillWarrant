@@ -4,14 +4,12 @@ import org.bukkit.plugin.Plugin;
 
 public class ConfigManager {
     private static ConfigManager instance;
-    private final Plugin plugin;
     private final SettingsConfig settingsConfig;
     private final OrdersConfig ordersConfig;
     private final MessageConfig messageConfig;
 
     private ConfigManager(Plugin plugin) {
-        this.plugin = plugin;
-        this.settingsConfig = new SettingsConfig(plugin, "settings", "yml");
+        this.settingsConfig = new SettingsConfig(plugin, "config", "yml");
         this.ordersConfig = new OrdersConfig(plugin, "orders", "yml");
         this.messageConfig = new MessageConfig(plugin, "messages", "yml");
     }
@@ -24,10 +22,6 @@ public class ConfigManager {
 
     public static ConfigManager getInstance() {
         return instance;
-    }
-
-    public Plugin getPlugin() {
-        return plugin;
     }
 
     public SettingsConfig getSettingsConfig() {

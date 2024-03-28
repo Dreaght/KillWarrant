@@ -9,13 +9,9 @@ import java.time.LocalDateTime;
 public class Order {
     private Player target;
     private Player client;
-
     private double award;
-
     private Location targetLocation;
-
     private BukkitRunnable runnable;
-
     private LocalDateTime date;
 
     public Order(Player targetName, Player clientName, double award, LocalDateTime date) {

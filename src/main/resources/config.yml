@@ -9,37 +9,3 @@ min-order-time: 10 # in minutes / after this time target would get some award de
 max-order-time: 60 # in minutes / at this time the order will be deleted and client will be gotten his money
 
 can-order-yourself: false
-
-messages:
-  menu:
-    title: "§8KillWarrant"
-    info:
-      name: "§7Make a murder order!"
-      lore:
-      - "§6/killer <target> <award>"
-  killer-command:
-    incorrect-number: "§cInput correct number as award!"
-    minimum-award: "§cKillWarrant §7>> §eMinimum award: §6%MINIMUM_AWARD%"
-    not-enough-money: "§cKillWarrant §7>> §cnot enough money!"
-    cant-order-yourself: "§cKillWarrant §7>> §cyou can't order yourself!"
-    already-ordered: "§cYou can't order it due to it has been already ordered by someone."
-    ordered: "§cKillWarrant §7>> §fPlayer §c%TARGET_NAME% §fwas ordered by §a%CLIENT_NAME%"
-    not-exist: "§cThis player doesn't exist."
-    not-online: "§cThis player must be online."
-    head:
-      target: "§c%TARGET_NAME% §7(§8%TIME_LEFT%m§7)"
-      client: "§7Client: §a%CLIENT_NAME%"
-      award: "§7Award: §6%AWARD%"
-      location: "§7Location: §6%LOCATION% §7(§8%COUNT%§7)"
-    usage:
-      - ""
-      - "§cKillWarrant §7>> §c/killer §8— §fOpen Menu"
-      - "§cKillWarrant §7>> §c/killer <target> <award> §8— §fOrder the player's head"
-  boss-bar:
-    order-announcement: "§6New order! §c§l%TARGET_NAME% §eAward: §6%AWARD%§7!"
-  killed: "§cKillWarrant §7>> §fPlayer §a%KILLER_NAME% §fhas killed §c%TARGET_NAME% §fin §a%TIME% minutes §fand got §6%AWARD%§f!"
-  got-nothing: "§cYou have killed your own ordered target, so you got nothing!"
-  refund-money: "§cKillWarrant §7>> §fNo one has completed the order to target §c%TARGET_NAME%§f!"
-  survive-time-award: "§aYou have been granted %AWARD% for your survive time!"
-
-orders: {}

@@ -7,12 +7,12 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.dreaght.killwarrant.KillWarrant;
 import org.dreaght.killwarrant.config.ConfigManager;
 import org.dreaght.killwarrant.utils.Order;
-import org.dreaght.killwarrant.utils.OrderManager;
+import org.dreaght.killwarrant.managers.OrderManager;
 
 public class JoinListener implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
-        OrderManager orderManager = KillWarrant.getOrderManager();
+        OrderManager orderManager = OrderManager.getInstance();
         Player player = event.getPlayer();
         ConfigManager configManager = ConfigManager.getInstance();
 

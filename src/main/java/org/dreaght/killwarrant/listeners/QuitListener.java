@@ -4,15 +4,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.dreaght.killwarrant.KillWarrant;
-import org.dreaght.killwarrant.gui.MenuManager;
+import org.dreaght.killwarrant.managers.MenuManager;
 import org.dreaght.killwarrant.utils.Order;
-import org.dreaght.killwarrant.utils.OrderManager;
+import org.dreaght.killwarrant.managers.OrderManager;
 
 public class QuitListener implements Listener {
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
-        OrderManager orderManager = KillWarrant.getOrderManager();
+        OrderManager orderManager = OrderManager.getInstance();
         Player player = event.getPlayer();
 
         Order order = orderManager.getOrderByTargetName(player.getName());
@@ -21,6 +20,5 @@ public class QuitListener implements Listener {
         }
 
         orderManager.removeOrder(order);
-        MenuManager.updateLocForAllMenu(0, 0);
     }
 }

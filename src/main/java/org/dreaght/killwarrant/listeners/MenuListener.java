@@ -6,7 +6,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.dreaght.killwarrant.config.ConfigManager;
-import org.dreaght.killwarrant.gui.MenuManager;
+import org.dreaght.killwarrant.managers.MenuManager;
 
 public class MenuListener implements Listener {
     @EventHandler
@@ -18,15 +18,6 @@ public class MenuListener implements Listener {
         }
 
         event.setCancelled(true);
-    }
-
-    @EventHandler
-    public void onMenuClose(InventoryCloseEvent event) {
-        Player player = (Player) event.getPlayer();
-
-        if (MenuManager.contains(player)) {
-            MenuManager.removePlayer(player);
-        }
     }
 
 }

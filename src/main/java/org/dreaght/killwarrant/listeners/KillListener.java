@@ -6,12 +6,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.dreaght.killwarrant.KillWarrant;
 import org.dreaght.killwarrant.config.ConfigManager;
-import org.dreaght.killwarrant.gui.MenuManager;
+import org.dreaght.killwarrant.managers.MenuManager;
 import org.dreaght.killwarrant.utils.EcoTransactions;
 import org.dreaght.killwarrant.utils.Order;
-import org.dreaght.killwarrant.utils.OrderManager;
+import org.dreaght.killwarrant.managers.OrderManager;
 import org.dreaght.killwarrant.utils.ParseValue;
 
 import java.time.LocalDateTime;
@@ -33,7 +32,7 @@ public class KillListener implements Listener {
         ConfigManager configManager = ConfigManager.getInstance();
 
         if (configManager.getOrdersConfig().getTargetList().contains(targetName)) {
-            OrderManager orderManager = KillWarrant.getOrderManager();
+            OrderManager orderManager = OrderManager.getInstance();
             Order order = orderManager.getOrderByTargetName(targetName);
 
             if (order.getClientName().equals(killer.getName())) {
@@ -63,7 +62,6 @@ public class KillListener implements Listener {
             configManager.getOrdersConfig().removeTarget(targetName);
 
             orderManager.removeOrder(order);
-            MenuManager.updateLocForAllMenu(0, 0);
         }
     }
 

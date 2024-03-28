@@ -11,9 +11,9 @@ import org.bukkit.plugin.Plugin;
 import org.dreaght.killwarrant.KillWarrant;
 import org.dreaght.killwarrant.config.ConfigManager;
 import org.dreaght.killwarrant.gui.BossBarNotification;
-import org.dreaght.killwarrant.gui.KillerMenu;
+import org.dreaght.killwarrant.managers.MenuManager;
 import org.dreaght.killwarrant.utils.Order;
-import org.dreaght.killwarrant.utils.OrderManager;
+import org.dreaght.killwarrant.managers.OrderManager;
 import org.dreaght.killwarrant.utils.ParseValue;
 
 import java.text.DecimalFormat;
@@ -46,9 +46,9 @@ public class KillerCommand implements CommandExecutor, TabCompleter {
         ConfigManager configManager = ConfigManager.getInstance();
 
         if (args.length == 0) {
-            KillerMenu.handleMenuCreation(player);
+            player.openInventory(MenuManager.getInstance().getInventory());
         } else if (args.length == 2) {
-            DecimalFormat decimalFormat = new DecimalFormat(configManager.getMessageConfig().getMessageByPath("decimal-award-format"));
+            DecimalFormat decimalFormat = new DecimalFormat(configManager.getSettingsConfig().getDecimalAwardFormat());
 
             String targetName = args[0];
             String awardStr = args[1];
@@ -114,8 +114,8 @@ public class KillerCommand implements CommandExecutor, TabCompleter {
         String ordered = configManager.getMessageConfig().getMessageByPath("messages.killer-command.ordered");
         Bukkit.broadcastMessage(ParseValue.parseWithBraces(ordered,
                 new String[]{"TARGET_NAME", "CLIENT_NAME"}, new String[]{target.getName(), client.getName()}));
-        OrderManager orderManager = KillWarrant.getOrderManager();
-        orderManager.saveOrder(order);
+        OrderManager.getInstance().saveOrder(order);
+        configManager.getOrdersConfig().addTarget(order);
 
         economy.withdrawPlayer(client, award);
     }

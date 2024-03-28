@@ -6,10 +6,7 @@ import org.bukkit.plugin.Plugin;
 import org.dreaght.killwarrant.utils.Order;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 public class OrdersConfig extends Configurable {
     protected OrdersConfig(Plugin plugin, String fileName, String fileExtension) {
@@ -17,7 +14,12 @@ public class OrdersConfig extends Configurable {
     }
 
     public Set<String> getTargetList() {
-        return Objects.requireNonNull(config.getConfigurationSection("orders")).getKeys(false);
+        ConfigurationSection section = config.getConfigurationSection("orders");
+        if (section == null) {
+            return new HashSet<>();
+        }
+
+        return section.getKeys(false);
     }
 
     public Order getOrderByTargetName(String targetName) {
@@ -52,11 +54,11 @@ public class OrdersConfig extends Configurable {
         config.set("orders." + targetName + ".award", order.getAward());
         config.set("orders." + targetName + ".target-location", order.getTargetLocation());
         config.set("orders." + targetName + ".date", order.getDate().toString());
-        plugin.saveConfig();
+        saveConfig();
     }
 
     public void removeTarget(String targetName) {
         config.set("orders." + targetName, null);
-        plugin.saveConfig();
+        saveConfig();
     }
 }

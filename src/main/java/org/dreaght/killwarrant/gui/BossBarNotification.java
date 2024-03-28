@@ -22,7 +22,7 @@ public class BossBarNotification {
     public void makeBossBar(World world, Order order) {
         ConfigManager configManager = ConfigManager.getInstance();
 
-        DecimalFormat decimalFormat = new DecimalFormat(configManager.getMessageConfig().getMessageByPath("decimal-award-format"));
+        DecimalFormat decimalFormat = new DecimalFormat(configManager.getSettingsConfig().getDecimalAwardFormat());
 
         Server server = plugin.getServer();
         final BukkitTask[] finalProgressTask = new BukkitTask[1];

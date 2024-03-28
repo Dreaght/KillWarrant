@@ -22,7 +22,7 @@ public class EcoTransactions {
         Bukkit.broadcastMessage(ParseValue.parseWithBraces(configManager.getMessageConfig().getMessageByPath("messages.refund-money"),
                 new String[]{"TARGET_NAME"},
                 new Object[]{order.getTargetName()}));
-
+        configManager.getOrdersConfig().removeTarget(order.getTargetName());
     }
 
     public static double calculateFinalAward(LocalDateTime dateTime1, LocalDateTime dateTime2, double award) {

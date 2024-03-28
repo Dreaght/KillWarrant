@@ -30,4 +30,12 @@ public class SettingsConfig extends Configurable {
     public boolean getCanOrderYourself() {
         return config.getBoolean("can-order-yourself");
     }
+
+    public String getDecimalAwardFormat() {
+        return config.getString("decimal-award-format");
+    }
+
+    public String getDecimalLocationFormat() {
+        return config.getString("decimal-location-format");
+    }
 }

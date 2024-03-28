@@ -5,27 +5,21 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.dreaght.killwarrant.commands.KillerCommand;
 import org.dreaght.killwarrant.config.ConfigManager;
-import org.dreaght.killwarrant.config.MessageConfig;
-import org.dreaght.killwarrant.config.OrdersConfig;
-import org.dreaght.killwarrant.config.SettingsConfig;
 import org.dreaght.killwarrant.listeners.JoinListener;
 import org.dreaght.killwarrant.listeners.MenuListener;
 import org.dreaght.killwarrant.listeners.KillListener;
 import org.dreaght.killwarrant.listeners.QuitListener;
-import org.dreaght.killwarrant.utils.OrderManager;
+import org.dreaght.killwarrant.managers.InventoryStateHandler;
+import org.dreaght.killwarrant.managers.MenuManager;
+import org.dreaght.killwarrant.managers.OrderManager;
 
 import java.util.Objects;
 
 public final class KillWarrant extends JavaPlugin {
     private static Economy econ = null;
-    private static OrderManager orderManager;
 
     public static Economy getEcon() {
         return econ;
-    }
-
-    public static OrderManager getOrderManager() {
-        return orderManager;
     }
 
     @Override
@@ -37,15 +31,19 @@ public final class KillWarrant extends JavaPlugin {
         }
 
         ConfigManager.init(this);
+        OrderManager.init(this).loadOrders();
+        MenuManager.init(this);
 
         getServer().getPluginManager().registerEvents(new KillListener(), this);
         getServer().getPluginManager().registerEvents(new MenuListener(), this);
         getServer().getPluginManager().registerEvents(new JoinListener(), this);
         getServer().getPluginManager().registerEvents(new QuitListener(), this);
         Objects.requireNonNull(getCommand("killer")).setExecutor(new KillerCommand(this));
+    }
 
-        orderManager = new OrderManager(this);
-        orderManager.loadOrders();
+    @Override
+    public void onDisable() {
+        InventoryStateHandler.saveInventory(MenuManager.getInstance().getInventory(), this);
     }
 
     private boolean setupEconomy() {
