@@ -16,8 +16,11 @@ public class InventoryStateHandler {
     public static void saveInventory(Inventory inventory, Plugin plugin) {
         try {
             String base64 = InventorySerializerUtil.toBase64(inventory);
-            File dataFolder = plugin.getDataFolder();
-            File filePath = new File(dataFolder, FILE_NAME);
+            File cacheFolder = new File(plugin.getDataFolder(), "cache");
+            if (!cacheFolder.exists()) {
+                cacheFolder.mkdirs();
+            }
+            File filePath = new File(cacheFolder, FILE_NAME);
             FileManager.saveStringToFile(base64, filePath.getPath());
         } catch (IOException e) {
             e.printStackTrace();
@@ -26,11 +29,17 @@ public class InventoryStateHandler {
 
     public static Inventory loadInventoryAndDeleteFile(Plugin plugin) {
         try {
-            File dataFolder = plugin.getDataFolder();
-            File filePath = new File(dataFolder, FILE_NAME);
+            File cacheFolder = new File(plugin.getDataFolder(), "cache");
+            File filePath = new File(cacheFolder, FILE_NAME);
+            if (!filePath.exists()) {
+                return null;
+            }
             String base64 = FileManager.loadStringFromFile(filePath.getPath());
             ItemStack[] contents = InventorySerializerUtil.fromBase64(base64).getContents();
             FileManager.deleteFile(filePath.getPath());
+            if (cacheFolder.isDirectory() && cacheFolder.list().length == 0) {
+                cacheFolder.delete();
+            }
             return createInventory(contents);
         } catch (IOException e) {
             e.printStackTrace();
@@ -44,7 +53,6 @@ public class InventoryStateHandler {
         }
 
         int size = items.length;
-        System.out.println(size);
 
         Inventory inventory = Bukkit.createInventory(
                 null, size, ConfigManager.getInstance().getMessageConfig().getMessageByPath("messages.menu.title"));
