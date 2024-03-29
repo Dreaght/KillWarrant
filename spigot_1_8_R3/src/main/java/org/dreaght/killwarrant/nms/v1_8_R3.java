@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
-public class v1_12_R1 implements InternalsProvider {
+public class v1_8_R3 implements InternalsProvider {
     @Override
     public ItemStack getStainedGlass() {
         return new ItemStack(Material.STAINED_GLASS_PANE);
@@ -18,7 +18,7 @@ public class v1_12_R1 implements InternalsProvider {
         ItemStack skull = new ItemStack(Material.SKULL_ITEM, 1, (short) SkullType.PLAYER.ordinal());
         SkullMeta skullMeta = (SkullMeta) skull.getItemMeta();
 
-        skullMeta.setOwningPlayer(player);
+        skullMeta.setOwner(player.getName());
         skull.setItemMeta(skullMeta);
 
         return skull;
@@ -26,11 +26,12 @@ public class v1_12_R1 implements InternalsProvider {
 
     @Override
     public Sound getFireballExplode() {
-        return Sound.ENTITY_ENDERDRAGON_FIREBALL_EXPLODE;
+        return Sound.GHAST_FIREBALL;
     }
 
     @Override
     public Sound getDragonHurt() {
-        return Sound.ENTITY_ENDERDRAGON_HURT;
+        return Sound.ENDERDRAGON_HIT;
     }
 }
+

@@ -5,6 +5,8 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/spigot_1.8_R1/pom.xml" />
+        <option value="$PROJECT_DIR$/spigot_1_8_R3/pom.xml" />
       </list>
     </option>
   </component>

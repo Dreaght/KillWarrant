@@ -16,7 +16,7 @@ public class NmsStuff {
             String internalsName = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
             internals = (InternalsProvider) Class.forName(packageName + "." + internalsName).newInstance();
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | ClassCastException exception) {
-            Bukkit.getLogger().log(Level.SEVERE, "ItemUtil could not find a valid implementation for this server version.");
+            Bukkit.getLogger().log(Level.SEVERE, "NmsStuff could not find a valid implementation for this server version.");
         }
     }
 
