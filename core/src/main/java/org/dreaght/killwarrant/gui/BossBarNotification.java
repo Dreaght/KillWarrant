@@ -7,6 +7,7 @@ import org.bukkit.boss.BossBar;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitTask;
 import org.dreaght.killwarrant.config.ConfigManager;
+import org.dreaght.killwarrant.nms.NmsStuff;
 import org.dreaght.killwarrant.utils.Order;
 import org.dreaght.killwarrant.utils.ParseValue;
 
@@ -29,7 +30,7 @@ public class BossBarNotification {
 
         server.getScheduler().runTask(plugin, () -> {
             Bukkit.getOnlinePlayers().forEach(player -> world.playSound(player.getLocation(),
-                    Sound.ENTITY_ENDER_DRAGON_HURT, 3.0F, 0.5F));
+                    NmsStuff.getDragonHurt(), 3.0F, 0.5F));
             BossBar bar = Bukkit.getServer().createBossBar(
                     ParseValue.parseWithBraces(configManager.getMessageConfig().getMessageByPath("messages.boss-bar.order-announcement"),
                             new String[]{"TARGET_NAME", "AWARD"},

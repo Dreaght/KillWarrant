@@ -14,9 +14,9 @@ public class Order {
     private BukkitRunnable runnable;
     private LocalDateTime date;
 
-    public Order(Player targetName, Player clientName, double award, LocalDateTime date) {
-        this.target = targetName;
-        this.client = clientName;
+    public Order(Player target, Player client, double award, LocalDateTime date) {
+        this.target = target;
+        this.client = client;
         this.award = award;
         this.date = date;
     }

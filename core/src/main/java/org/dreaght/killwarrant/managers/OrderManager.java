@@ -56,6 +56,10 @@ public class OrderManager {
 
         Player target = order.getTarget();
 
+        if (target == null) {
+            return;
+        }
+
         BukkitRunnable runnable = new BukkitRunnable() {
             Location lastLocation = target.getLocation();
 

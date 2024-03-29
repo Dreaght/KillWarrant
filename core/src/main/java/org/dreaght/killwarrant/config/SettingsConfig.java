@@ -23,10 +23,6 @@ public class SettingsConfig extends Configurable {
         return config.getLong("max-order-time");
     }
 
-    public long getMinOrderTime() {
-        return config.getLong("min-order-time");
-    }
-
     public boolean getCanOrderYourself() {
         return config.getBoolean("can-order-yourself");
     }
@@ -37,5 +33,9 @@ public class SettingsConfig extends Configurable {
 
     public String getDecimalLocationFormat() {
         return config.getString("decimal-location-format");
+    }
+
+    public boolean getAwardDecrease() {
+        return config.getBoolean("award-decrease");
     }
 }

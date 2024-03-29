@@ -10,6 +10,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.dreaght.killwarrant.config.ConfigManager;
+import org.dreaght.killwarrant.nms.NmsStuff;
 import org.dreaght.killwarrant.utils.Order;
 import org.dreaght.killwarrant.utils.ParseValue;
 
@@ -107,7 +108,7 @@ public class MenuManager {
         inventory = Bukkit.createInventory(null, 36, ConfigManager.getInstance().getMessageConfig().getMessageByPath("messages.menu.title"));
 
         for (int i = 0; i < 9; i++) {
-            ItemStack item = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
+            ItemStack item = new ItemStack(NmsStuff.getStainedGlass());
             ItemMeta itemMeta = item.getItemMeta();
 
             itemMeta.setDisplayName("§0");
@@ -135,10 +136,8 @@ public class MenuManager {
         DecimalFormat decimalLocFormat = new DecimalFormat(configManager.getSettingsConfig().getDecimalLocationFormat());
 
         for (Order order : orders) {
-            ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
+            ItemStack skull = new ItemStack(NmsStuff.getSkull(order.getTarget()));
             SkullMeta skullMeta = (SkullMeta) skull.getItemMeta();
-
-            skullMeta.setOwningPlayer(Bukkit.getOfflinePlayer(order.getTargetName()));
 
             LocalDateTime date = order.getDate();
             LocalDateTime currentDate = LocalDateTime.now();

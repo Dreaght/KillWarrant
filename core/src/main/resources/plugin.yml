@@ -1,10 +1,10 @@
 name: KillWarrant
-version: '${project.version}'
+version: ${project.version}
 main: org.dreaght.killwarrant.KillWarrant
-api-version: '1.20'
 authors: [Dreaght]
-description: Commission the demise of any participant.
+description: ${project.description}
 commands:
   killer:
     description: Look at targets list, order a kill!
 depend: [Vault]
+api-version: 1.13

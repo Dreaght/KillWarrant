@@ -1,17 +1,18 @@
 package org.dreaght.killwarrant.listeners;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.dreaght.killwarrant.config.ConfigManager;
+import org.dreaght.killwarrant.nms.NmsStuff;
 import org.dreaght.killwarrant.utils.EcoTransactions;
 import org.dreaght.killwarrant.utils.Order;
 import org.dreaght.killwarrant.managers.OrderManager;
 import org.dreaght.killwarrant.utils.ParseValue;
 
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -42,21 +43,23 @@ public class KillListener implements Listener {
             LocalDateTime date = order.getDate();
             LocalDateTime currentDate = LocalDateTime.now();
 
-            double finalAward = EcoTransactions.calculateFinalAward(date, currentDate, order.getAward());
+            double award = order.getAward();
+
+            if (configManager.getSettingsConfig().getAwardDecrease()) {
+                award = EcoTransactions.calculateFinalAward(date, currentDate, order.getAward());
+            }
+
             double survivedTime = EcoTransactions.calculateMinutesDifference(date, currentDate);
+
+            DecimalFormat decimalFormat = new DecimalFormat(configManager.getSettingsConfig().getDecimalAwardFormat());
 
             Bukkit.broadcastMessage(ParseValue.parseWithBraces(configManager.getMessageConfig().getMessageByPath("messages.killed"),
                     new String[]{"KILLER_NAME", "TARGET_NAME", "AWARD", "TIME"},
-                    new Object[]{killer.getName(), targetName, finalAward, survivedTime}));
+                    new Object[]{killer.getName(), targetName, decimalFormat.format(award), survivedTime}));
             Bukkit.getOnlinePlayers().forEach(player -> deathPlayer.getWorld().playSound(player.getLocation(),
-                    Sound.ENTITY_DRAGON_FIREBALL_EXPLODE, 3.0F, 0.5F));
+                    NmsStuff.getFireballExplode(), 3.0F, 0.5F));
 
-            EcoTransactions.depositPlayer(killer, finalAward);
-
-            if (survivedTime >= configManager.getSettingsConfig().getMinOrderTime()) {
-                EcoTransactions.depositPlayer(deathPlayer, order.getAward() - finalAward);
-                deathPlayer.sendMessage(configManager.getMessageConfig().getMessageByPath("messages.survive-time-award"));
-            }
+            EcoTransactions.depositPlayer(killer, award);
 
             configManager.getOrdersConfig().removeTarget(targetName);
 

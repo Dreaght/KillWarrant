@@ -6,7 +6,14 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="KillWarrant" />
+        <module name="core" />
+        <module name="spigot_1_12_R1" />
+      </profile>
+      <profile name="Annotation profile for KillWarrant" enabled="true">
+        <sourceOutputDir name="../target/generated-sources/annotations" />
+        <sourceTestOutputDir name="../target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="dist" />
       </profile>
     </annotationProcessing>
   </component>

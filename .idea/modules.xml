@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/KillWarrant.iml" filepath="$PROJECT_DIR$/KillWarrant.iml" />
+      <module fileurl="file://$PROJECT_DIR$/core/core.iml" filepath="$PROJECT_DIR$/core/core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dist.iml" filepath="$PROJECT_DIR$/dist.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spigot_1_12_R1.iml" filepath="$PROJECT_DIR$/spigot_1_12_R1.iml" />
     </modules>
   </component>
 </project>

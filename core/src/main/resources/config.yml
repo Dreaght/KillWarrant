@@ -5,7 +5,9 @@ boss-bar-time: 5.0 # in seconds
 decimal-award-format: "0"
 decimal-location-format: "#"
 location-update-period: 10 # in seconds
-min-order-time: 10 # in minutes / after this time target would get some award depending on his survive time
 max-order-time: 60 # in minutes / at this time the order will be deleted and client will be gotten his money
 
 can-order-yourself: false
+
+# will the reward for the killer decrease with the time the warrant expires
+award-decrease: true
