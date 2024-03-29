@@ -50,7 +50,6 @@ public class MenuManager {
         Inventory loadedInventory = InventoryStateHandler.loadInventoryAndDeleteFile(plugin);
 
         if (loadedInventory == null) {
-            System.out.println("null");
             return;
         }
 
@@ -58,15 +57,11 @@ public class MenuManager {
         for (Player player : Bukkit.getOnlinePlayers()) {
             Inventory playerInventory = player.getOpenInventory().getTopInventory();
             if (inventoriesEqual(playerInventory, loadedInventory)) {
-                System.out.println("equal");
                 playersToReopen.add(player);
-            } else {
-                System.out.println("not equal");
             }
         }
 
         for (Player player : playersToReopen) {
-            System.out.println("reopening for " + player.getName());
             player.closeInventory();
             player.openInventory(inventory);
         }
@@ -93,12 +88,6 @@ public class MenuManager {
                 Set<Order> orders = OrderManager.getInstance().getOrders();
 
                 List<ItemStack> targetHeads = getTargetHeads(orders);
-
-                if (targetHeads.isEmpty()) {
-                    for (int i = 9; i < 35; i++) {
-                        inventory.setItem(i, new ItemStack(Material.AIR));
-                    }
-                }
 
                 for (int i = 9; i < targetHeads.size() + 9; i++) {
                     inventory.setItem(i, targetHeads.get(i - 9));

@@ -4,7 +4,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.dreaght.killwarrant.KillWarrant;
 import org.dreaght.killwarrant.config.ConfigManager;
 import org.dreaght.killwarrant.utils.Order;
 import org.dreaght.killwarrant.managers.OrderManager;

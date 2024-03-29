@@ -8,13 +8,11 @@ import org.dreaght.killwarrant.config.ConfigManager;
 import org.dreaght.killwarrant.utils.EcoTransactions;
 import org.dreaght.killwarrant.utils.Order;
 
-import java.text.DecimalFormat;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class OrderManager {
     private static OrderManager instance;
