@@ -89,7 +89,11 @@ public class InventorySerializerUtil {
             Inventory inventory = Bukkit.getServer().createInventory(null, dataInput.readInt());
 
             for (int i = 0; i < inventory.getSize(); i++) {
-                inventory.setItem(i, (ItemStack) dataInput.readObject());
+                try {
+                    inventory.setItem(i, (ItemStack) dataInput.readObject());
+                } catch (NullPointerException ignored) {
+                }
+
             }
 
             dataInput.close();

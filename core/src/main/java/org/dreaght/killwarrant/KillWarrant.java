@@ -31,9 +31,8 @@ public final class KillWarrant extends JavaPlugin {
         }
 
         ConfigManager.init(this);
-        MenuManager.init(this);
-
         OrderManager.init(this).loadOrders();
+        MenuManager.init(this);
 
         getServer().getPluginManager().registerEvents(new KillListener(), this);
         getServer().getPluginManager().registerEvents(new MenuListener(), this);

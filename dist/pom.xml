@@ -58,11 +58,6 @@
         </dependency>
         <dependency>
             <groupId>org.dreaght</groupId>
-            <artifactId>killwarrant-spigot_1_8_R3</artifactId>
-            <version>1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.dreaght</groupId>
             <artifactId>killwarrant-spigot_1_13_R2</artifactId>
             <version>1.0</version>
         </dependency>
