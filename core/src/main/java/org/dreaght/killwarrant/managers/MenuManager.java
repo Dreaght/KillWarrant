@@ -15,6 +15,7 @@ import org.dreaght.killwarrant.utils.Order;
 import org.dreaght.killwarrant.utils.ParseValue;
 
 import java.text.DecimalFormat;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -53,7 +54,11 @@ public class MenuManager {
     }
 
     private void reopenInventoryForPlayers() {
-        Inventory loadedInventory = InventoryStateHandler.loadInventoryAndDeleteFile(plugin);
+        Inventory loadedInventory = null;
+        try {
+            loadedInventory = InventoryStateHandler.loadInventoryAndDeleteFile(plugin);
+        } catch (IllegalStateException ignored) {
+        }
 
         if (loadedInventory == null) {
             return;
@@ -95,25 +100,37 @@ public class MenuManager {
 
                 List<ItemStack> targetHeads = getTargetHeads(orders);
 
-                for (int i = 9; i < targetHeads.size() + 9; i++) {
-                    inventory.setItem(i, targetHeads.get(i - 9));
-                }
+                try {
+                    for (int i = 9; i < targetHeads.size() + 9; i++) {
+                        inventory.setItem(i, targetHeads.get(i - 9));
+                    }
 
-                for (int i = 9 + targetHeads.size(); i < (menuRows * 9) - 1; i++) {
-                    inventory.setItem(i, new ItemStack(Material.AIR));
+                    for (int i = 9 + targetHeads.size(); i < (menuRows * 9) - 1; i++) {
+                        inventory.setItem(i, new ItemStack(Material.AIR));
+                    }
+                } catch (IndexOutOfBoundsException exception) {
+                    Bukkit.getLogger().warning("Too much orders! Inventory size exceeded.");
                 }
-
             }
         };
 
-        runnable.runTaskTimer(plugin, 0, 20);
+        if (Bukkit.getServer().getPluginManager().isPluginEnabled(plugin)) {
+            runnable.runTaskTimer(plugin, 0, 20);
+        }
     }
 
     public void loadContent() {
         ConfigManager configManager = ConfigManager.getInstance();
-        inventory = Bukkit.createInventory(
-                null, menuRows * 9,
-                ConfigManager.getInstance().getMessageConfig().getMessageByPath("messages.menu.title"));
+
+        try {
+            inventory = Bukkit.createInventory(
+                    null, menuRows * 9,
+                    ConfigManager.getInstance().getMessageConfig().getMessageByPath("messages.menu.title"));
+        } catch (IllegalArgumentException exception) {
+            Bukkit.getLogger().severe("Invalid menu row value. Must be between 3 and 6.");
+            Bukkit.getServer().getPluginManager().disablePlugin(plugin);
+            return;
+        }
 
         for (int i = 0; i < 9; i++) {
             ItemStack item = new ItemStack(NmsStuff.getStainedGlass());
@@ -163,7 +180,7 @@ public class MenuManager {
                     decimalLocFormat.format(order.getTargetLocation().getY()) + " " +
                     decimalLocFormat.format(order.getTargetLocation().getZ());
 
-            long differenceInSeconds = java.time.Duration.between(date, currentDate).getSeconds();
+            long differenceInSeconds = Duration.between(date, currentDate).getSeconds();
             int seconds = configManager.getSettingsConfig().getLocationUpdatePeriod();
             long remainder = seconds - (differenceInSeconds % seconds) - 1;
 

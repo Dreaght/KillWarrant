@@ -1,6 +1,7 @@
 package org.dreaght.killwarrant;
 
 import net.milkbowl.vault.economy.Economy;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.dreaght.killwarrant.commands.KillerCommand;
@@ -34,6 +35,10 @@ public final class KillWarrant extends JavaPlugin {
         OrderManager.init(this).loadOrders();
         MenuManager.init(this);
 
+        if (!Bukkit.getServer().getPluginManager().isPluginEnabled(this)) {
+            return;
+        }
+
         getServer().getPluginManager().registerEvents(new KillListener(), this);
         getServer().getPluginManager().registerEvents(new MenuListener(), this);
         getServer().getPluginManager().registerEvents(new JoinListener(), this);
@@ -43,7 +48,11 @@ public final class KillWarrant extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        InventoryStateHandler.saveInventory(MenuManager.getInstance().getInventory(), this);
+        try {
+            InventoryStateHandler.saveInventory(MenuManager.getInstance().getInventory(), this);
+        } catch (NullPointerException ignored) {
+        }
+
     }
 
     private boolean setupEconomy() {

@@ -1,8 +1,8 @@
 name: KillWarrant
-version: ${project.version}
+version: 1.0
 main: org.dreaght.killwarrant.KillWarrant
 authors: [Dreaght]
-description: ${project.description}
+description: Commission the demise of any participant.
 commands:
   killer:
     description: Look at targets list, order a kill!
