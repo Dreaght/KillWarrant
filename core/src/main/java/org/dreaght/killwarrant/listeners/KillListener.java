@@ -46,7 +46,7 @@ public class KillListener implements Listener {
             double award = order.getAward();
 
             if (configManager.getSettingsConfig().getAwardDecrease()) {
-                award = EcoTransactions.calculateFinalAward(date, currentDate, order.getAward());
+                award = EcoTransactions.calculateFinalAward(date, currentDate, order.getAward(), configManager);
             }
 
             double survivedTime = EcoTransactions.calculateMinutesDifference(date, currentDate);

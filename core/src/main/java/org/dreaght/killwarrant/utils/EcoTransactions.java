@@ -25,11 +25,8 @@ public class EcoTransactions {
         configManager.getOrdersConfig().removeTarget(order.getTargetName());
     }
 
-    public static double calculateFinalAward(LocalDateTime dateTime1, LocalDateTime dateTime2, double award) {
-        ConfigManager configManager = ConfigManager.getInstance();
-
+    public static double calculateFinalAward(LocalDateTime dateTime1, LocalDateTime dateTime2, double award, ConfigManager configManager) {
         long minutesDifference = calculateMinutesDifference(dateTime1, dateTime2);
-
         double ratio = (double) minutesDifference / configManager.getSettingsConfig().getMaxOrderTime();
         return award - (award * ratio);
     }

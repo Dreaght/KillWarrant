@@ -15,6 +15,10 @@ public class SettingsConfig extends Configurable {
         return config.getDouble("min-award");
     }
 
+    public int getMenuRows() {
+        return config.getInt("menu-rows");
+    }
+
     public int getLocationUpdatePeriod() {
         return config.getInt("location-update-period");
     }

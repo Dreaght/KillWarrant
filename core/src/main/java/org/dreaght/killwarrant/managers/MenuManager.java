@@ -26,10 +26,15 @@ public class MenuManager {
     private Plugin plugin;
     private Inventory inventory;
 
+    private static int menuRows;
+
     private MenuManager(Plugin plugin) {
         this.plugin = plugin;
+
+        ConfigManager configManager = ConfigManager.getInstance();
+        menuRows = configManager.getSettingsConfig().getMenuRows();
         loadContent();
-        startUpdating();
+        startUpdating(OrderManager.getInstance());
         reopenInventoryForPlayers();
     }
 
@@ -82,11 +87,11 @@ public class MenuManager {
         return true;
     }
 
-    public void startUpdating() {
+    public void startUpdating(OrderManager orderManager) {
         BukkitRunnable runnable = new BukkitRunnable() {
             @Override
             public void run() {
-                Set<Order> orders = OrderManager.getInstance().getOrders();
+                Set<Order> orders = orderManager.getOrders();
 
                 List<ItemStack> targetHeads = getTargetHeads(orders);
 
@@ -94,9 +99,10 @@ public class MenuManager {
                     inventory.setItem(i, targetHeads.get(i - 9));
                 }
 
-                for (int i = 9 + targetHeads.size(); i < 35; i++) {
+                for (int i = 9 + targetHeads.size(); i < (menuRows * 9) - 1; i++) {
                     inventory.setItem(i, new ItemStack(Material.AIR));
                 }
+
             }
         };
 
@@ -105,7 +111,9 @@ public class MenuManager {
 
     public void loadContent() {
         ConfigManager configManager = ConfigManager.getInstance();
-        inventory = Bukkit.createInventory(null, 36, ConfigManager.getInstance().getMessageConfig().getMessageByPath("messages.menu.title"));
+        inventory = Bukkit.createInventory(
+                null, menuRows * 9,
+                ConfigManager.getInstance().getMessageConfig().getMessageByPath("messages.menu.title"));
 
         for (int i = 0; i < 9; i++) {
             ItemStack item = new ItemStack(NmsStuff.getStainedGlass());
@@ -128,7 +136,7 @@ public class MenuManager {
         inventory.setItem(4, infoItem);
     }
 
-    private List<ItemStack> getTargetHeads(Set<Order> orders) {
+    public List<ItemStack> getTargetHeads(Set<Order> orders) {
         List<ItemStack> targetHeads = new ArrayList<>();
         ConfigManager configManager = ConfigManager.getInstance();
 

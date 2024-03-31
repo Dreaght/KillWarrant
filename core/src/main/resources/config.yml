@@ -1,6 +1,8 @@
 min-award: 50
 boss-bar-time: 5.0 # in seconds
 
+menu-rows: 5 # How much menu rows will be in the killer menu
+
 # 0 - "0"; 1 - "0.#"; 2 - "0.##"
 decimal-award-format: "0"
 decimal-location-format: "#"
