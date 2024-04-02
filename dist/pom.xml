@@ -9,7 +9,7 @@
     <parent>
         <groupId>org.dreaght</groupId>
         <artifactId>killwarrant-parent</artifactId>
-        <version>1.0</version>
+        <version>v1.0-beta</version>
     </parent>
 
     <properties>

@@ -4,15 +4,15 @@ import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.dreaght.killwarrant.commands.KillerCommand;
+import org.dreaght.killwarrant.command.KillerCommand;
 import org.dreaght.killwarrant.config.ConfigManager;
-import org.dreaght.killwarrant.listeners.JoinListener;
-import org.dreaght.killwarrant.listeners.MenuListener;
-import org.dreaght.killwarrant.listeners.KillListener;
-import org.dreaght.killwarrant.listeners.QuitListener;
-import org.dreaght.killwarrant.managers.InventoryStateHandler;
-import org.dreaght.killwarrant.managers.MenuManager;
-import org.dreaght.killwarrant.managers.OrderManager;
+import org.dreaght.killwarrant.listener.JoinListener;
+import org.dreaght.killwarrant.listener.MenuListener;
+import org.dreaght.killwarrant.listener.KillListener;
+import org.dreaght.killwarrant.listener.QuitListener;
+import org.dreaght.killwarrant.manager.InventoryStateHandler;
+import org.dreaght.killwarrant.manager.MenuManager;
+import org.dreaght.killwarrant.manager.OrderManager;
 
 import java.util.Objects;
 

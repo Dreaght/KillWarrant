@@ -1,4 +1,4 @@
-package org.dreaght.killwarrant.listeners;
+package org.dreaght.killwarrant.listener;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

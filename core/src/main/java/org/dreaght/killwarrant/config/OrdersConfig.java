@@ -3,7 +3,7 @@ package org.dreaght.killwarrant.config;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.Plugin;
-import org.dreaght.killwarrant.utils.Order;
+import org.dreaght.killwarrant.util.Order;
 
 import java.time.LocalDateTime;
 import java.util.*;

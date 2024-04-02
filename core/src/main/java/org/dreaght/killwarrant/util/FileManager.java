@@ -1,4 +1,4 @@
-package org.dreaght.killwarrant.utils;
+package org.dreaght.killwarrant.util;
 
 import java.io.IOException;
 import java.nio.file.Files;

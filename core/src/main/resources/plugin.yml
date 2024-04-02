@@ -1,5 +1,5 @@
 name: KillWarrant
-version: 1.0
+version: v1.0-beta
 main: org.dreaght.killwarrant.KillWarrant
 authors: [Dreaght]
 description: Commission the demise of any participant.

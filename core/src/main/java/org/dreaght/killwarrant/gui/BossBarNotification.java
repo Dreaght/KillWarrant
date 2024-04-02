@@ -8,8 +8,8 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitTask;
 import org.dreaght.killwarrant.config.ConfigManager;
 import org.dreaght.killwarrant.nms.NmsStuff;
-import org.dreaght.killwarrant.utils.Order;
-import org.dreaght.killwarrant.utils.ParseValue;
+import org.dreaght.killwarrant.util.Order;
+import org.dreaght.killwarrant.util.ParseValue;
 
 import java.text.DecimalFormat;
 

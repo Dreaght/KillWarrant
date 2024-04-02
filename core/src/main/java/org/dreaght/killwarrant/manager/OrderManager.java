@@ -1,12 +1,12 @@
-package org.dreaght.killwarrant.managers;
+package org.dreaght.killwarrant.manager;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.dreaght.killwarrant.config.ConfigManager;
-import org.dreaght.killwarrant.utils.EcoTransactions;
-import org.dreaght.killwarrant.utils.Order;
+import org.dreaght.killwarrant.util.EcoTransactions;
+import org.dreaght.killwarrant.util.Order;
 
 import java.time.Duration;
 import java.time.LocalDateTime;

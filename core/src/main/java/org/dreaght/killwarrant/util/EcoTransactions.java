@@ -1,4 +1,4 @@
-package org.dreaght.killwarrant.utils;
+package org.dreaght.killwarrant.util;
 
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;

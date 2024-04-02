@@ -1,4 +1,4 @@
-package org.dreaght.killwarrant.utils;
+package org.dreaght.killwarrant.util;
 
 public class ParseValue {
     public static String parseWithBraces(String configString, String[] variables, Object[] values) {

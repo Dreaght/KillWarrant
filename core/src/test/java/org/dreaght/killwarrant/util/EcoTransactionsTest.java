@@ -1,4 +1,4 @@
-package org.dreaght.killwarrant.utils;
+package org.dreaght.killwarrant.util;
 
 import org.dreaght.killwarrant.config.ConfigManager;
 import org.dreaght.killwarrant.config.SettingsConfig;

@@ -1,4 +1,4 @@
-package org.dreaght.killwarrant.managers;
+package org.dreaght.killwarrant.manager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -11,8 +11,8 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.dreaght.killwarrant.config.ConfigManager;
 import org.dreaght.killwarrant.nms.NmsStuff;
-import org.dreaght.killwarrant.utils.Order;
-import org.dreaght.killwarrant.utils.ParseValue;
+import org.dreaght.killwarrant.util.Order;
+import org.dreaght.killwarrant.util.ParseValue;
 
 import java.text.DecimalFormat;
 import java.time.Duration;

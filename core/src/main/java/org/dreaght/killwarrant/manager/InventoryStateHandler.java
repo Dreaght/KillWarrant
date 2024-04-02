@@ -1,12 +1,12 @@
-package org.dreaght.killwarrant.managers;
+package org.dreaght.killwarrant.manager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.dreaght.killwarrant.config.ConfigManager;
-import org.dreaght.killwarrant.utils.FileManager;
-import org.dreaght.killwarrant.utils.InventorySerializerUtil;
+import org.dreaght.killwarrant.util.FileManager;
+import org.dreaght.killwarrant.util.InventorySerializerUtil;
 
 import java.io.*;
 

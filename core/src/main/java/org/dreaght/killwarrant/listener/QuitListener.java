@@ -1,11 +1,11 @@
-package org.dreaght.killwarrant.listeners;
+package org.dreaght.killwarrant.listener;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.dreaght.killwarrant.utils.Order;
-import org.dreaght.killwarrant.managers.OrderManager;
+import org.dreaght.killwarrant.util.Order;
+import org.dreaght.killwarrant.manager.OrderManager;
 
 public class QuitListener implements Listener {
     @EventHandler

@@ -1,4 +1,4 @@
-package org.dreaght.killwarrant.commands;
+package org.dreaght.killwarrant.command;
 
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
@@ -11,10 +11,10 @@ import org.bukkit.plugin.Plugin;
 import org.dreaght.killwarrant.KillWarrant;
 import org.dreaght.killwarrant.config.ConfigManager;
 import org.dreaght.killwarrant.gui.BossBarNotification;
-import org.dreaght.killwarrant.managers.MenuManager;
-import org.dreaght.killwarrant.utils.Order;
-import org.dreaght.killwarrant.managers.OrderManager;
-import org.dreaght.killwarrant.utils.ParseValue;
+import org.dreaght.killwarrant.manager.MenuManager;
+import org.dreaght.killwarrant.util.Order;
+import org.dreaght.killwarrant.manager.OrderManager;
+import org.dreaght.killwarrant.util.ParseValue;
 
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;

@@ -1,4 +1,4 @@
-package org.dreaght.killwarrant.utils;
+package org.dreaght.killwarrant.util;
 
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.Inventory;
