@@ -3,6 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/core/core.iml" filepath="$PROJECT_DIR$/core/core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/core/killwarrant-core.iml" filepath="$PROJECT_DIR$/core/killwarrant-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spigot_1_12_R1/killwarrant-spigot_1_12_R1.iml" filepath="$PROJECT_DIR$/spigot_1_12_R1/killwarrant-spigot_1_12_R1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spigot_1_13_R2/killwarrant-spigot_1_13_R2.iml" filepath="$PROJECT_DIR$/spigot_1_13_R2/killwarrant-spigot_1_13_R2.iml" />
       <module fileurl="file://$PROJECT_DIR$/spigot_1_12_R1.iml" filepath="$PROJECT_DIR$/spigot_1_12_R1.iml" />
       <module fileurl="file://$PROJECT_DIR$/spigot_1_13_R2.iml" filepath="$PROJECT_DIR$/spigot_1_13_R2.iml" />
     </modules>

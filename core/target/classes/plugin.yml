@@ -1,0 +1,10 @@
+name: KillWarrant
+version: v1.0-beta
+main: org.dreaght.killwarrant.KillWarrant
+authors: [Dreaght]
+description: Commission the demise of any participant.
+commands:
+  killer:
+    description: Look at targets list, order a kill!
+depend: [Vault]
+api-version: 1.13
